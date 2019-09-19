@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.y{
+				display:block ;
+				list-style-type: none;  
+margin:0px;  
+height: 52px;;
+			}
+			.x{
+				float:left;
+				width:50px;
+				height:50px;
+				border:1px solid #111111;
+				text-align: center;
+				line-height: 50px;
+			}
+		</style>
+		<script src="jquery/jquery-1.9.1.min.js"></script>
+	</head>
+	<body>
+		<ul class="y y-1">
+			<li class="x x-1"></li>
+			<li class="x x-2"></li>
+			<li class="x x-3"></li>
+			<li class="x x-4"></li>
+		</ul>
+		<ul class="y y-2">
+			<li class="x x-1"></li>
+			<li class="x x-2"></li>
+			<li class="x x-3"></li>
+			<li class="x x-4"></li>
+		</ul>
+		<ul class="y y-3">
+			<li class="x x-1"></li>
+			<li class="x x-2"></li>
+			<li class="x x-3"></li>
+			<li class="x x-4"></li>
+		</ul>
+		<ul class="y y-4">
+			<li class="x x-1"></li>
+			<li class="x x-2"></li>
+			<li class="x x-3"></li>
+			<li class="x x-4"></li>
+		</ul>
+		
+	</body>
+	<script >
+		var xarray = new Array;
+		var yarray = new Array;
+		function rams (){
+			let ram = Math.floor(Math.random()*5)+1;
+			return ram;
+		}
+		function start(){
+			var gezi = $(".x");
+			for(let i = 0; i<gezi.length;i++ ){
+			gezi[i].innerHTML= rams ();
+			
+		}
+		}
+		
+		//合并相同项
+		function addsame(){
+			
+			for(let i =1 ; i <= 4;i++){
+				console.log($(".y-"+i))
+				xarray = $(".y-"+i).children($("x"));
+				yarray.push(xarray);
+			}
+			for(let i = 0 ;i< 4 ;i++){
+				for(let y = 0; y<4 ;y++){
+					if(i == y){
+						//判断左右
+						leftright(i,y)
+					}
+				}
+			}
+		}
+		//左右
+		function leftright(i,y){
+			var num = yarray[i][y].innerHTML;
+			var samenum  = 1;
+			console.log(num)
+			if(y-1<0){//左边第一个
+				var snum = yarray[i][y+x].innerHTML;
+				for(let x = 1;x<3;x++){
+				
+					if(num == sunm){
+						samenum++
+					}else{
+						return
+					}
+				}
+				if(samenum>2){
+					
+				}
+			}else{//不是左边第一个，所以要判断左边的情况
+				
+				for(let x = 1;x <= y;x++){
+					var snum = yarray[i][y-x].innerHTML;
+					if(num == sunm){
+						samenum++;
+					}else{
+						return;
+					}
+				}
+				判断右边
+				for(let x = 1;x <(4 - y);x++){
+					var snum = yarray[i][y+x].innerHTML;
+					if(num == sunm){
+						samenum++
+					}else{
+						return
+					}
+				}
+				if(same>2){//判断上下
+					
+				}
+			}
+			
+		}
+		//上下
+		function updowm(i,y){
+			
+		}
+		
+		//开始
+		start();
+		addsame();
+	</script>
+</html>

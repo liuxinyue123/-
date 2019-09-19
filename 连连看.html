@@ -1,0 +1,334 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>简单易学的连连看小游戏-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* {
+	margin:0;
+	padding:0
+}
+#canvas {
+	border:1px solid #000;
+	margin:0 auto;
+	display:block;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" width="600px" height="600px"></canvas>
+<script>
+var canvas = document.getElementById("canvas");
+var ct = canvas.getContext("2d");
+
+var arr = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+]
+
+var colorArr = []
+
+//初始化
+int()
+
+function int(rx, ry) {
+    ct.clearRect(0, 0, canvas.width, canvas.height)//清除图形
+
+    for (var i = 0; i < 8; i++) {
+        //随机颜色
+        var R = Math.round(Math.random() * 255).toString(16);
+        R = R.length < 2 ? 0 + R : R;
+        var G = Math.round(Math.random() * 255).toString(16);
+        G = G.length < 2 ? 0 + G : G;
+        var B = Math.round(Math.random() * 255).toString(16);
+        B = B.length < 2 ? 0 + B : B;
+        colorArr[i] = "#" + R + G + B;
+
+        //每两对颜色随机排放
+        for (var j = 0; j < 2; j++) {
+
+            var x = Math.round(Math.random() * 3) + 1;//1 2 3 4
+            var y = Math.round(Math.random() * 3) + 1;
+
+            (function() {
+                if (arr[y][x] == 0) {
+                    arr[y][x] = colorArr[i] //i+1;
+                    return
+                }
+
+                for (x = 1; x < 5; x++) {
+                    for (y = 1; y < 5; y++) {
+                        if (arr[y][x] == 0) {
+                            arr[y][x] = colorArr[i] //i+1;
+                            return
+                        }
+                    }
+                }
+
+
+            })()
+
+            //根据XY轴绘制
+            ct.save();//调用该方法，会保存当前context的状态、属性（把他理解成游戏存档）
+            ct.translate(-50, -50)//平移
+            ct.fillStyle = colorArr[i]
+            ct.fillRect(x * 100 + 50, y * 100 + 50, 100, 100);//绘制图形
+            ct.restore();
+        }
+    }
+}
+
+
+var oldX = 0;
+var oldY = 0;
+
+var showline = false;
+//当点击的时候
+var X = 0;
+var Y = 0;
+
+var click = true
+canvas.addEventListener("click", function(evt) {
+    var e = evt || window.event;
+    if (click) {
+        mouseclick(e)
+        click = false
+    }
+    setTimeout(function() {
+        click = true
+    }, 200)
+
+
+
+})
+
+function mouseclick(e) {
+
+
+    if (e.layerX) {
+        X = e.layerX;//鼠标当前点对于盒子模型的左上角的长，由于canvas里面的内容不能选择，所以就是鼠标当期点到canvas的左上角的距离，除以100刚好能知道是哪一个
+        Y = e.layerY;
+    } else {
+        X = e.offsetX;
+        Y = e.offsetY;
+    }
+    //获取X 和Y 的坐标
+    X = parseInt(X / 100);
+    Y = parseInt(Y / 100);
+    ct.clearRect(0, 0, canvas.width, canvas.height)
+
+    //查找相同
+    if (oldX != 0 && oldY != 0) {
+
+        if (arr[Y][X] == arr[oldY][oldX]) { //&& arr[Y][X]!=0
+            var log = [
+                [oldX, oldY]
+            ]
+            //一次直线
+            line(X, Y, oldX, oldY)
+
+            function line(X, Y, oldX, oldY, bool, con) {
+                if (X == oldX && Math.abs(Y - oldY) > 0) {
+                    var num = 0;
+                    if (Y > oldY) {
+                        for (var i = oldY + 1; i < Y; i++) {
+                            arr[i][X] == 0 ? num++ : '';
+                        }
+                    } else {
+                        for (var i = Y + 1; i < oldY; i++) {
+                            arr[i][X] == 0 ? num++ : '';
+                        }
+                    }
+                    if (num == Math.abs(Y - oldY) - 1) {
+                        if (!bool) clear();
+
+                        return true
+
+
+                    }
+                    if (!bool) {
+                        for (var i = 0; i < 6; i++) {
+                            if (line(i, Y, i, oldY, true, true) && line(X, Y, i, Y, true) && line(oldX, oldY, i, oldY, true)) {
+                                if (arr[oldY][i] == 0 && arr[Y][i] == 0) {
+                                    log.push([i, oldY])
+                                    log.push([i, Y])
+
+                                    clear()
+                                    return
+                                }
+                            }
+                        }
+                    }
+
+                } else if (Math.abs(X - oldX) > 0 && Y == oldY) {
+                    var num = 0;
+                    if (X > oldX) {
+                        for (var i = oldX + 1; i < X; i++) {
+                            arr[Y][i] == 0 ? num++ : '';
+                        }
+                    } else {
+                        for (var i = X + 1; i < oldX; i++) {
+                            arr[Y][i] == 0 ? num++ : '';
+                        }
+                    }
+                    if (num == Math.abs(X - oldX) - 1) {
+                        if (!bool) clear();
+
+                        return true
+
+                    }
+                    if (!bool) {
+                        for (var i = 0; i < 6; i++) {
+                            if (line(X, i, oldX, i, true, true) && line(X, Y, X, i, true) && line(oldX, oldY, oldX, i, true)) {
+                                if (arr[i][oldX] == 0 && arr[i][X] == 0) {
+                                    log.push([oldX, i])
+                                    log.push([X, i])
+
+                                    clear()
+                                    return
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (!bool) {
+                        //一折的时候
+                        if (line(X, oldY, oldX, oldY, true) && line(X, oldY, X, Y, true) && arr[oldY][X] == 0) {
+                            log.push([X, oldY])
+
+                            clear()
+                            return
+                        } else if (line(oldX, Y, oldX, oldY, true) && line(oldX, Y, X, Y, true) && arr[Y][oldX] == 0) {
+                            log.push([oldX, Y])
+
+                            clear()
+                            return
+                        }
+
+                        //二折的时候
+                        if (Math.abs(X - oldX) > 0 && Math.abs(Y - oldY) > 0) {
+                            for (var i = 0; i < 6; i++) {
+
+                                if (line(X, i, oldX, i, true, true) && line(X, Y, X, i, true) && line(oldX, oldY, oldX, i, true)) {
+                                    if (arr[i][oldX] == 0 && arr[i][X] == 0) {
+                                        log.push([oldX, i])
+                                        log.push([X, i])
+
+                                        clear()
+                                        return
+                                    }
+
+                                } else if (line(i, Y, i, oldY, true, true) && line(X, Y, i, Y, true) && line(oldX, oldY, i, oldY, true)) {
+                                    if (arr[oldY][i] == 0 && arr[Y][i] == 0) {
+                                        log.push([i, oldY])
+                                        log.push([i, Y])
+
+                                        clear()
+                                        return
+                                    }
+
+                                } else {
+                                    //return 
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+
+    }
+
+
+
+
+    //清空
+    function clear() {
+        //li = 1;
+
+        showline = true
+
+        arr[Y][X] = 0;
+        arr[oldY][oldX] = 0;
+
+    }
+
+    //当没有相同的时候
+    drawRect(arr, X, Y, log)
+
+
+}
+
+
+//当没有相同的时候    当点击重新绘制
+function drawRect(arr, x, y, log) {
+
+    for (var i = 0; i < arr.length; i++) {
+
+        for (var j = 0; j < arr[i].length; j++) {
+
+            (function() {
+                ct.save()
+                if (arr[i][j] == 0) {
+                    return
+                }
+                ct.fillStyle = arr[i][j]
+
+                if (x == j && y == i) {
+                    ct.translate(-40, -40)
+                    ct.fillRect(j * 100 + 50, i * 100 + 50, 80, 80);
+
+                    oldX = j;
+                    oldY = i;
+
+                } else {
+                    ct.translate(-50, -50)
+                    ct.fillRect(j * 100 + 50, i * 100 + 50, 100, 100);
+
+                }
+
+                ct.restore();
+            })()
+
+        }
+    }
+
+    //连接线
+
+    if (showline == true) {
+        console.log(log)
+        log.push([x, y])
+
+        ct.save()
+        ct.beginPath()
+        ct.lineWidth = "20"
+        ct.lineCap = "round"
+        ct.moveTo(log[0][0] * 100 + 50, log[0][1] * 100 + 50)
+
+        for (var i = 1; i < log.length; i++) {
+
+            ct.lineTo(log[i][0] * 100 + 50, log[i][1] * 100 + 50)
+
+        }
+        ct.stroke()
+        ct.restore()
+
+        setTimeout(function() {
+            ct.clearRect(0, 0, canvas.width, canvas.height)
+            showline = false
+            drawRect(arr, x, y)
+        }, 200)
+    }
+
+}</script>
+</body>
+</html>

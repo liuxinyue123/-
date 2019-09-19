@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery.mousewheel.js"></script>
+	<style type="text/css">
+		.text{
+			width:100%;
+			height:50px;
+			background: #000;
+			color:#fff;
+		}
+		.son{
+			height:200px;
+		}
+		.all{
+			position: relative;
+			top:720px;
+		}
+	</style>
+</head>
+<body>
+<div class="all">
+	<div  class="text" id="father1">
+		father1
+	</div>
+	<div class=" son" id="son1">
+		son
+	</div>
+	<div id="father2" class="text">
+		father1
+	</div>
+	<div class=" son" id="son2">
+		son
+	</div>
+	<div class="text" id="father3">
+		father1
+	</div>
+	<div class="son" id="son3">
+		son
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+var a = $(".text");
+console.log(a);
+var updown = function(){
+		n = a.length;
+	for (var i = 0; i <= n; i++) {
+		var qus = $(a[i]);	
+		qus.next().hide();
+		qus.on("click",function(event) {
+		   	$(this).next().slideToggle(400);
+		})
+
+	}
+	
+}
+updown();
+var listenTOP = setInterval(function begin(){
+	var top = $(".all").offset().top - $(document).scrollTop();;
+
+},100);
+
+})
+//检测变量类型是string
+typeof obj ==="string";
+typeof (obj) ==="string";
+obj.constructor === String;
+
+</script>	
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<div>
+		<canvas id="canvas" width="600px" height="600px"></canvas>
+	</div>
+
+<script type="text/javascript">
+
+function run(id){
+	var canvas = document.getElementById(id);
+
+ 	if (canvas == null)
+    return false;
+    var context = canvas.getContext("2d");//这两步骤是必须的
+
+	context.fillStyle = "yellow";
+	context.strokeStyle = "black";
+
+	//画头部和身子
+	context.beginPath();
+	context.fillRect(100,100,200,200);
+	context.arc(200,100,100,0,Math.PI*2,true);
+	//context.arc(400,300,50,0,Math.PI*2,true);
+	//context.arc(150,300,50,0,Math.PI*2,true);
+	//创建矩形实心的
+	////创建矩形只有border
+	context.fill();
+	context.closePath();
+	//画手
+	context.beginPath();
+	context.arc(325,275,30,0,Math.PI*2,true);
+	context.arc(75,275,30,0,Math.PI*2,true);
+	context.fill();
+	context.closePath();
+	//眼睛
+	context.fillStyle = "black";
+	context.beginPath();
+	context.arc(250,100,10,0,Math.PI*2,true);
+	context.arc(150,100,10,0,Math.PI*2,true);
+	context.fill();
+	context.closePath();
+
+	//裤子和腿
+	context.fillStyle = "blue";
+	context.beginPath();
+	//裤带
+	context.fillRect(100,230,50,20);
+	context.fillRect(150,230,20,80);
+	context.fillRect(230,230,70,20);
+	context.fillRect(230,230,20,80);
+	//裤子
+	context.fillRect(100,300,200,200);
+	context.save();
+	context.translate(400,350);
+	context.rotate(Math.PI);
+	context.fill();
+	context.closePath();
+	
+	//嘴巴、旋转
+	//
+	//
+	context.fillStyle = "red";
+	context.beginPath();
+	context.arc(200,200,30,0,Math.PI*1,true);
+	
+	context.fill();
+	
+	
+	context.closePath();
+	
+}
+run("canvas");
+
+</script>
+</body>
+
+</html>

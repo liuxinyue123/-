@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+
+	.select{
+		appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+	
+	background: black;
+	color: #eee;
+	display:block;
+	padding:5px 30px 5px 10px;
+
+	}	
+	.trangle{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid #fff;
+    float: right;
+    position: relative;
+    z-index: 3;
+    top: 18px;
+    right:5px;
+}
+.big{
+	width:60px;
+}
+
+	</style>
+</head>
+<body>
+	<div class="big">
+	<span class="trangle"></span>
+		<select class="select">
+			<option disabled value="" selected>123</option>
+			<option value="123">123</option>
+			<option value="3">3</option>
+			<option value="312">312</option>
+			<option value="132">132</option>
+			
+		</select>
+		<textarea placeholder="我是文本框"></textarea>
+
+	</div>
+</body>
+<script type="text/javascript">
+</script>
+</html>
